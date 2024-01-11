@@ -26,19 +26,6 @@ function get_default($input_function)
     return $hasil;
 }
 
-//Mengambil Supplier
-// function get_supplier($input_function)
-// {
-//     include "../asset_default/koneksi.php";
-//     $input = json_encode($input_function);
-//     $query = "SELECT purchasing.get_supplier_for_quick_purchase('" . $input . "') as result";
-//     $result = pg_query($link, $query);
-//     $row = pg_fetch_array($result);
-//     $hasil = json_decode($row["result"], true);
-//     $hasil = $hasil["body"];
-//     return $hasil;
-// }
-
 //Mengambil Detail Transaction Detail
 function get_transaction_detail($input_function)
 {
@@ -105,20 +92,6 @@ function remove_transaction_detail($input_function)
     return $hasil;
 }
 
-//Mengambil Summary Transaction
-function get_summary_transaction_detail($input_function)
-{
-    $hasil = 0;
-    $input = array("body" => array("quick_purchase_id" => $input_function));
-    $result = get_transaction_detail($input);
-    if (is_array($result) && count($result)) {
-        foreach ($result as $baris) :
-            $hasil = $hasil + $baris["grand_total"];
-        endforeach;
-    }
-    return $hasil;
-}
-
 //Validate Quick Purchase
 function validate_data($input_function)
 {
@@ -168,5 +141,19 @@ function get_data_warehouse($input_function)
     $row = pg_fetch_array($result);
     $hasil = json_decode($row["result"], true);
     $hasil = $hasil["body"];
+    return $hasil;
+}
+
+//Mengambil Summary Transaction
+function get_summary_transaction_detail($input_function)
+{
+    $hasil = 0;
+    $input = array("body" => array("quick_purchase_id" => $input_function));
+    $result = get_transaction_detail($input);
+    if (is_array($result) && count($result)) {
+        foreach ($result as $baris) :
+            $hasil = $hasil + $baris["grand_total"];
+        endforeach;
+    }
     return $hasil;
 }
