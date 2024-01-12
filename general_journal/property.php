@@ -108,12 +108,12 @@ if (!empty($_POST)) {
       endforeach;
     }
     $output .=
-      '</tbody>
+    '</tbody>
       <tfoot>
         <tr>
           <th colspan = 2></th>
-          <th class ="jq_format_decimal_table">' . $sum_debet . '</th>
-          <th id="jq_th_grand_total" class ="jq_format_decimal_table">' . $sum_credit . '</th>
+          <th id="jq_th_debet" class ="jq_format_decimal_table">' . $sum_debet . '</th>
+          <th id="jq_th_credit" class ="jq_format_decimal_table">' . $sum_credit . '</th>
           <th></th>
         </tr>
       </tfoot></table>';
