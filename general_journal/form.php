@@ -56,9 +56,17 @@ include "api.php";
                     </div>
                     </div>
                     <div class="col-md-6 col-sm-12 form-group">
+                      <label class="control-label col-md-3">Total Debet</label>
+                      <div class="col-md-9">
+                        <input type="text" name="debet_parent" id="jq_debet_parent" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                      </div>
+                      <label class="control-label col-md-3">Total Credit</label>
+                      <div class="col-md-9">
+                        <input type="text" name="credit_parent" id="jq_credit_parent" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                      </div>
                       <label class="control-label col-md-3">Description</label>
                       <div class="col-md-9">
-                        <textarea class="form-control" rows="3" name="description_parent" id="jq_description_parent" value=""></textarea>
+                        <textarea class="form-control" name="description_parent" id="jq_description_parent" value=""></textarea>
                       </div>
                     </div>
                   </div>
@@ -153,6 +161,8 @@ include "api.php";
         $("table#data_general_journal_table").DataTable({
           pageLength: 100
         })
+        $("input#jq_debet_parent").val($("th#jq_th_debet").text());
+        $("input#jq_credit_parent").val($("th#jq_th_credit").text());
       }
     });
   }
