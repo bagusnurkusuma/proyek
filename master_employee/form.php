@@ -195,7 +195,12 @@ include "api.php";
     //Archive Detail
     $(document).on('click', '.archive_detail', function() {
       if ($('#jq_archive_reason').val() == '') {
-        alert("Archive Reason Must be Filled");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Archive Reason Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -248,11 +253,26 @@ include "api.php";
     //Update Detail
     $(document).on('click', '.update_detail', function() {
       if ($('#jq_nik').val() == "") {
-        alert("Mohon Isi NIK");
-      } else if ($('#jq_nama').val() == "") {
-        alert("Mohon Isi Nama");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "NIK Must be Filled !",
+          icon: "warning"
+        });
+      } else if ($('#jq_name').val() == "") {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Name Must be Filled !",
+          icon: "warning"
+        });
       } else if ($('#jq_address').val() == '') {
-        alert("Mohon Isi Alamat");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Address Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -264,7 +284,9 @@ include "api.php";
             name: $('#jq_name').val()
           },
           success: function(data) {
-            if (data == "") {
+            var parsedData = $.parseJSON(data);
+            var result = parsedData[0].msg;
+            if (result == "") {
               $.ajax({
                 url: "action.php",
                 method: "POST",
@@ -279,9 +301,15 @@ include "api.php";
                 }
               });
             } else {
-              alert(data);
+              Swal.fire({
+                position: "top",
+                title: "Warning",
+                text: result,
+                icon: "warning"
+              });
             }
           }
+
         });
       }
     });
