@@ -19,7 +19,6 @@ if (!empty($_POST)) {
       "column_name" => "id"
     ));
     remove_transaction_detail($input);
-    $input = '';
   } elseif ($_POST["action_status"] == "remove_product") {
     $input = array("body" =>
     array(
@@ -28,7 +27,6 @@ if (!empty($_POST)) {
       "column_name" => "id"
     ));
     remove_transaction_detail($input);
-    $input = '';
   } elseif ($_POST["action_status"] == "edit_product") {
     $input = array("body" =>
     array(
@@ -49,7 +47,6 @@ if (!empty($_POST)) {
       "description" => $_POST['description']
     ));
     update_transaction_detail($input);
-    $input = '';
   } elseif ($_POST["action_status"] == "input_barcode") {
     $input = array("body" =>
     array(
@@ -70,7 +67,6 @@ if (!empty($_POST)) {
       "total_changes" => $_POST["total_changes"]
     ));
     pay_transaction($input);
-    $input = '';
   } elseif ($_POST["action_status"] == "select_supplier_data") {
     //Select Supplier Data
     $input = ['body' => ['data_id' => $_POST['data_id']]];
@@ -89,15 +85,6 @@ if (!empty($_POST)) {
         "warehouse_id" => $_POST["warehouse_id"]
       )
     );
-    $hasil = validate_data($input);
-    $output = '';
-    if (
-      is_array($hasil) && count($hasil)
-    ) {
-      foreach ($hasil as $row) :
-        $output .=  $row["msg"];
-      endforeach;
-    }
-    echo $output;
+    echo json_encode(validate_data($input));
   }
 }
