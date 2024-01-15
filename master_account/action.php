@@ -10,7 +10,7 @@ if (!empty($_POST)) {
          "created_by" => $_POST["created_by"],
          "code" => $_POST["code"],
          "name" => $_POST["name"],
-         "sub_account" => $_POST["sub_account"],
+         "sub_account_id" => $_POST["sub_account_id"],
          "desc" => $_POST["desc"]
       ));
       set_new_data($input);
@@ -21,7 +21,7 @@ if (!empty($_POST)) {
          "created_by" => $_POST["created_by"],
          "code" => $_POST["code"],
          "name" => $_POST["name"],
-         "sub_account" => $_POST["sub_account"],
+         "sub_account_id" => $_POST["sub_account_id"],
          "desc" => $_POST["desc"]
       ));
       set_new_data($input);
@@ -46,7 +46,7 @@ if (!empty($_POST)) {
          "column_name" => "id"
       ));
       unarchive_data($input);
-   } elseif ($_POST["action_status"] == "validate_detail") {
+   } elseif ($_POST["action_status"] == "validate_data") {
       //Validate Data
       $input = array(
          "body" =>
@@ -59,13 +59,10 @@ if (!empty($_POST)) {
             )
          )
       );
-      $hasil = validate_data($input);
-      $output = '';
-      if (is_array($hasil) & count($hasil)) {
-         foreach ($hasil as $row) :
-            $output .= $row["msg"];
-         endforeach;
-      }
-      echo $output;
+      echo json_encode(validate_data($input));
+   } elseif ($_POST["action_status"] == "select_sub_account_data") {
+      //Select Warehouse Data
+      $input = ['body' => ['data_id' => $_POST['data_id']]];
+      echo json_encode(get_data_detail($input));
    }
 }
