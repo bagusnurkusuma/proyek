@@ -230,7 +230,12 @@ include "api.php";
     //Archive Detail
     $(document).on("click", ".archive_detail", function() {
       if ($("#jq_archive_reason").val() == "") {
-        alert("Archive Reason Must be Filled");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Archive Reason Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -283,15 +288,40 @@ include "api.php";
     //Update Detail
     $(document).on("click", ".update_detail", function() {
       if ($("#jq_code").val() == "") {
-        alert("Mohon Isi Inventory Category Code");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Inventory Category Code Must be Filled !",
+          icon: "warning"
+        });
       } else if ($("#jq_name").val() == "") {
-        alert("Mohon Isi Inventory Category Name");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Inventory Category Name Must be Filled !",
+          icon: "warning"
+        });
       } else if ($("#jq_inventory_account_id").val() == "") {
-        alert("Mohon Isi Inventory Account");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Inventory Account Must be Selected !",
+          icon: "warning"
+        });
       } else if ($("#jq_sales_account_id").val() == "") {
-        alert("Mohon Isi Sales Account");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Sales Account Must be Selected !",
+          icon: "warning"
+        });
       } else if ($("#jq_expenses_account_id").val() == "") {
-        alert("Mohon Isi Expenses Account");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Expenses Account Must be Selected !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -303,22 +333,29 @@ include "api.php";
             name: $("#jq_name").val()
           },
           success: function(data) {
-            if (data == "") {
+            var parsedData = $.parseJSON(data);
+            var result = parsedData[0].msg;
+            if (result == "") {
               $.ajax({
                 url: "action.php",
                 method: "POST",
-                data: $("#update_form").serialize(),
+                data: $('#update_form').serialize(),
                 beforeSend: function() {
-                  $("#update").val("Updating");
+                  $('#update').val("Updating");
                 },
                 success: function(data) {
-                  $("#update_form")[0].reset();
-                  $("#editModal").modal("hide");
+                  $('#update_form')[0].reset();
+                  $('#editModal').modal('hide');
                   act_refresh_data_detail();
                 }
               });
             } else {
-              alert(data);
+              Swal.fire({
+                position: "top",
+                title: "Warning",
+                text: result,
+                icon: "warning"
+              });
             }
           }
         });
