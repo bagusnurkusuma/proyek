@@ -275,9 +275,17 @@ include "api.php";
   }
 
   function act_cancel() {
-    var text = "Are you sure cancel this transaction";
-    if (confirm(text) == true) {
-      $(document).ready(function() {
+    Swal.fire({
+      position: "top",
+      title: "Confirmation",
+      text: "Are you sure Cancel this Transaction ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      reverseButtons: false
+    }).then((result) => {
+      if (result.isConfirmed) {
         var transaction_id = $("#jq_transaction_id").val();
 
         $.ajax({
@@ -291,9 +299,8 @@ include "api.php";
             go_to_home_pages();
           }
         });
-
-      });
-    } else {}
+      }
+    });
   }
 
   function get_data_detail_edit(arg_data_id, arg_action_status) {
@@ -368,16 +375,36 @@ include "api.php";
       });
     });
 
-    //Confirm Transaction
+    //Save Transaction
     $(document).on("click", ".save_transaction", function() {
       if ($("#jq_inventory_result_id").val() == "") {
-        alert("Inventory harus diisi");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Inventory Must be Selected !",
+          icon: "warning"
+        });
       } else if ($("#jq_warehouse_result_id").val() == "") {
-        alert("Warehouse harus diisi");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Warehouse Must be Selected !",
+          icon: "warning"
+        });
       } else if ($("#jq_unit_result_id").val() == "") {
-        alert("Unit Harus Diisi");
-      } else if ($("#jq_qty_result").val() < 0) {
-        alert("Qty harus lebih dari 0");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Unit Must be Selected !",
+          icon: "warning"
+        });
+      } else if ($("#jq_qty_result").val() <= 0) {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Qty must be filled more than 0.00 !",
+          icon: "warning"
+        });
       } else {
         var transaction_id = $("#jq_transaction_id").val();
         var transaction_date = $("#jq_transaction_date").val();
@@ -387,32 +414,48 @@ include "api.php";
         var unit_id = $("#jq_unit_result_id").val();
         var batch_number = $("#jq_batch_number_result").val();
         var expired_date = $("#jq_expired_date_result").val();
-        if (confirm("Are You Sure To Save This Transaction ?") == true) {
-          $.ajax({
-            url: "action.php",
-            method: "POST",
-            data: {
-              action_status: "validate_detail",
-              transaction_id: transaction_id,
-              transaction_date: transaction_date,
-              warehouse_id: warehouse_id,
-              inventory_id: inventory_id,
-              qty: qty,
-              unit_id: unit_id,
-              batch_number: batch_number,
-              expired_date: expired_date
-            },
-            success: function(data) {
-              var parsedData = $.parseJSON(data);
-              var result = parsedData[0].msg;
-              if (result == "") {
-                window.location = "../material_conversion/form.php";
-              } else {
-                alert(result);
+        Swal.fire({
+          position: "top",
+          title: "Confirmation",
+          text: "Are You Sure To Save This Transaction ?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          reverseButtons: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: "action.php",
+              method: "POST",
+              data: {
+                action_status: "validate_detail",
+                transaction_id: transaction_id,
+                transaction_date: transaction_date,
+                warehouse_id: warehouse_id,
+                inventory_id: inventory_id,
+                qty: qty,
+                unit_id: unit_id,
+                batch_number: batch_number,
+                expired_date: expired_date
+              },
+              success: function(data) {
+                var parsedData = $.parseJSON(data);
+                var result = parsedData[0].msg;
+                if (result == "") {
+                  window.location = "../material_conversion/form.php";
+                } else {
+                  Swal.fire({
+                    position: "top",
+                    title: "Warning",
+                    text: result,
+                    icon: "warning"
+                  });
+                }
               }
-            }
-          });
-        } else {}
+            });
+          }
+        });
       }
     });
 
@@ -559,9 +602,19 @@ include "api.php";
     // Btn Edit dan Validasi
     $(document).on("click", ".update_detail", function() {
       if ($("input#jq_qty").val() <= 0) {
-        alert("Qty harus diisi lebih dari 0");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Qty must be filled more than 0.00 !",
+          icon: "warning"
+        });
       } else if ($("input#jq_warehouse_id").val() == "") {
-        alert("Warehouse harus diisi");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Warehouse Must be Selected !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
