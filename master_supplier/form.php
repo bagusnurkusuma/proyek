@@ -195,7 +195,12 @@ include "api.php";
     //Archive Detail
     $(document).on("click", ".archive_detail", function() {
       if ($("#jq_archive_reason").val() == "") {
-        alert("Archive Reason Must be Filled");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Archive Reason Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -248,13 +253,33 @@ include "api.php";
     //Update Detail
     $(document).on("click", ".update_detail", function() {
       if ($("#jq_supplier").val() == "") {
-        alert("Mohon Isi Supplier");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Supplier Name Must be Filled !",
+          icon: "warning"
+        });
       } else if ($("#jq_email").val() == "") {
-        alert("Mohon Isi Email");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Email Name Must be Filled !",
+          icon: "warning"
+        });
       } else if ($("#jq_telepon").val() == "") {
-        alert("Mohon Isi Telepon");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Telp Must be Filled !",
+          icon: "warning"
+        });
       } else if ($("#jq_address").val() == "") {
-        alert("Mohon Isi Alamat");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Address Name Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -265,22 +290,29 @@ include "api.php";
             supplier: $("#jq_supplier").val()
           },
           success: function(data) {
-            if (data == "") {
+            var parsedData = $.parseJSON(data);
+            var result = parsedData[0].msg;
+            if (result == "") {
               $.ajax({
                 url: "action.php",
                 method: "POST",
-                data: $("#update_form").serialize(),
+                data: $('#update_form').serialize(),
                 beforeSend: function() {
-                  $("#update").val("Updating");
+                  $('#update').val("Updating");
                 },
                 success: function(data) {
-                  $("#update_form")[0].reset();
-                  $("#editModal").modal("hide");
+                  $('#update_form')[0].reset();
+                  $('#editModal').modal('hide');
                   act_refresh_data_detail();
                 }
               });
             } else {
-              alert(data);
+              Swal.fire({
+                position: "top",
+                title: "Warning",
+                text: result,
+                icon: "warning"
+              });
             }
           }
         });
