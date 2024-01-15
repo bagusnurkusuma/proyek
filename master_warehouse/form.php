@@ -195,7 +195,12 @@ include "api.php";
     //Archive Detail
     $(document).on('click', '.archive_detail', function() {
       if ($('#jq_archive_reason').val() == '') {
-        alert("Archive Reason Must be Filled");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Archive Reason Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -248,9 +253,19 @@ include "api.php";
     //Update Detail
     $(document).on('click', '.update_detail', function() {
       if ($('#jq_warehouse_code').val() == "") {
-        alert("Mohon Isi Warehouse Code");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Warehouse Code Must be Filled !",
+          icon: "warning"
+        });
       } else if ($('#jq_warehouse_name').val() == "") {
-        alert("Mohon Isi Warehouse Name");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Warehouse Name Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -262,7 +277,9 @@ include "api.php";
             name: $('#jq_warehouse_name').val()
           },
           success: function(data) {
-            if (data == "") {
+            var parsedData = $.parseJSON(data);
+            var result = parsedData[0].msg;
+            if (result == "") {
               $.ajax({
                 url: "action.php",
                 method: "POST",
@@ -277,7 +294,12 @@ include "api.php";
                 }
               });
             } else {
-              alert(data);
+              Swal.fire({
+                position: "top",
+                title: "Warning",
+                text: result,
+                icon: "warning"
+              });
             }
           }
         });
