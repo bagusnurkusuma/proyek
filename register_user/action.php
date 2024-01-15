@@ -25,7 +25,6 @@ if (!empty($_POST)) {
          "column_name" => "id"
       ));
       remove_transaction_detail($input);
-      $input = '';
    } elseif ($_POST["action_status"] == "select_menu_process") {
       $input = array("body" =>
       array(
@@ -34,6 +33,5 @@ if (!empty($_POST)) {
          "created_by" => $_POST["created_by"]
       ));
       set_new_user_acces($input);
-      $input = '';
    }
 }
