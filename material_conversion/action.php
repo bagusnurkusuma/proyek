@@ -19,7 +19,6 @@ if (!empty($_POST)) {
       "column_name" => "id"
     ));
     remove_transaction_detail($input);
-    $input = "";
   } elseif ($_POST["action_status"] == "remove_product") {
     $input = array("body" =>
     array(
@@ -28,7 +27,6 @@ if (!empty($_POST)) {
       "column_name" => "id"
     ));
     remove_transaction_detail($input);
-    $input = "";
   } elseif ($_POST["action_status"] == "edit_product") {
     $input = array("body" =>
     array(
@@ -42,7 +40,6 @@ if (!empty($_POST)) {
       "expired_date" => $_POST["expired_date"]
     ));
     update_transaction_detail($input);
-    $input = "";
   } elseif ($_POST["action_status"] == "select_warehouse_data") {
     //Select Warehouse Data
     $input = ["body" => ["data_id" => $_POST["data_id"]]];
