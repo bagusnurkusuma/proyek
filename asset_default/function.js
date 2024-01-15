@@ -29,7 +29,7 @@ function get_current_last_date() {
   return lastDay;
 }
 
-function format_input_decimal(number, decimals, dec_point, thousands_sep) {
+function pretty_input_decimal(number, decimals, dec_point, thousands_sep) {
   if (number != "") {
     var n = !isFinite(+number) ? 0 : +number,
       prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
@@ -97,18 +97,26 @@ function formatRupiah(angka, prefix) {
   return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
 }
 
+function format_input_decimal(arg_input) {
+  var result = pretty_input_decimal(arg_input, 2, ",", ".");
+  return result;
+}
+
 $.fn.pretty_format_table = function () {
   var component = $(this).find(
     "th.jq_format_decimal_table,td.jq_format_decimal_table,td.jq_format_date_table,td button.btn"
   );
   component.each(function () {
     if ($(this).hasClass("jq_format_decimal_table")) {
-      $(this).css("text-align", "right");
-      $(this).css("width", "75px");
       var number = $(this).text();
-      var result = format_input_decimal(number, 2, ",", ".");
-      $(this).text(result);
-      return this;
+      if (number.includes(".") && number.includes(",")) {
+      } else {
+        $(this).css("text-align", "right");
+        $(this).css("width", "75px");
+        var result = pretty_input_decimal(number, 2, ",", ".");
+        $(this).text(result);
+        return this;
+      }
     } else if ($(this).hasClass("jq_format_date_table")) {
       $(this).css("text-align", "center");
       $(this).css("width", "75px");
