@@ -298,9 +298,17 @@ endforeach;
   }
 
   function act_cancel() {
-    var text = "Are you sure cancel this transaction";
-    if (confirm(text) == true) {
-      $(document).ready(function() {
+    Swal.fire({
+      position: "top",
+      title: "Confirmation",
+      text: "Are you sure Cancel this Transaction ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      reverseButtons: false
+    }).then((result) => {
+      if (result.isConfirmed) {
         var transaction_id = $("#jq_transaction_id").val();
 
         $.ajax({
@@ -314,11 +322,8 @@ endforeach;
             go_to_home_pages();
           }
         });
-
-      });
-    } else {
-      $("input#jq_barcode_form").focus();
-    }
+      }
+    });
   }
 
   function get_data_detail_edit(arg_data_id, arg_action_status) {
@@ -418,15 +423,13 @@ endforeach;
     //Remove Transaction Detail
     $(document).on("click", ".delete_data", function() {
       var data_id = $(this).attr("id");
-      var transaction_id = $("#jq_transaction_id").val();
 
       $.ajax({
         url: "action.php",
         method: "POST",
         data: {
           data_id: data_id,
-          action_status: "remove_product",
-          transaction_id: transaction_id
+          action_status: "remove_product"
         },
         success: function(data) {
           act_refresh_table_quick_purchase();
@@ -455,7 +458,9 @@ endforeach;
           warehouse_name: warehouse_name
         },
         success: function(data) {
-          if (data == "") {
+          var parsedData = $.parseJSON(data);
+          var result = parsedData[0].msg;
+          if (result == "") {
             $.ajax({
               url: "property.php",
               method: "POST",
@@ -474,7 +479,12 @@ endforeach;
               }
             });
           } else {
-            alert(data);
+            Swal.fire({
+              position: "top",
+              title: "Warning",
+              html: result,
+              icon: "warning"
+            });
           }
         }
       });
@@ -555,15 +565,40 @@ endforeach;
     $(document).on("click", ".update_detail", function() {
       event.preventDefault();
       if ($("#jq_qty").val() <= 0) {
-        alert("Qty harus diisi lebih dari 0");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Qty must be filled more than 0.00 !",
+          icon: "warning"
+        });
       } else if ($("#jq_disc_1_percent").val() < 0 | $("#jq_disc_2_percent").val() < 0 | $("#jq_disc_1_nominal").val() < 0 | $("#jq_disc_2_nominal").val() < 0) {
-        alert("Discount tidak bisa diisi Minus");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Discount Cannot be filled in Minus !",
+          icon: "warning"
+        });
       } else if ($("#jq_disc_1_percent").val() > 100 | $("#jq_disc_2_percent").val() > 100) {
-        alert("Discount tidak bisa diisi lebih dari 100 %");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Discount cannot be filled more than 100% !",
+          icon: "warning"
+        });
       } else if ($("#jq_vat").val() < 0) {
-        alert("Vat tidak bisa diisi Minus");
+        Swal.fire({
+          position: "top",
+          title: "Waning",
+          text: "VAT  Cannot be filled in Minus !",
+          icon: "warning"
+        });
       } else if ($("#jq_vat").val() > 100) {
-        alert("Vat tidak bisa diisi lebih dari 100 %");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "VAT cannot be filled more than 100% !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -584,10 +619,20 @@ endforeach;
 
     //Btn Pay dan Membayar
     $(document).on("click", ".pay_transaction", function() {
-      if ($("#jq_pay_grand_total").val() <= 0) {
-        alert("Grand Total harus lebih dari 0");
-      } else if (Number($("#jq_pay_grand_total").val()) > Number($("#jq_pay_total_cash").val())) {
-        alert("Cash minimal harus sama dengan Grand Total");
+      if ($("input#jq_pay_grand_total").val() <= 0) {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Grand Total must be filled more than 0.00 !",
+          icon: "warning"
+        });
+      } else if (Number($("input#jq_pay_grand_total").val()) > Number($("input#jq_pay_total_cash").val())) {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Total Cash must be at least the same as Grand Total !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
