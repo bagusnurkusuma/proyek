@@ -59,16 +59,7 @@ if (!empty($_POST)) {
             )
          )
       );
-      $hasil = validate_data($input);
-      $output = '';
-      if (
-         is_array($hasil) && count($hasil)
-      ) {
-         foreach ($hasil as $row) :
-            $output .=  $row["msg"];
-         endforeach;
-      }
-      echo $output;
+      echo json_encode(validate_data($input));
    } elseif ($_POST["action_status"] == "select_warehouse_data") {
       //Select Warehouse Data
       $input = ['body' => ['data_id' => $_POST['data_id']]];
