@@ -30,7 +30,7 @@ include "api.php";
                   </li>
                 </ul>
                 <div align="right">
-                  <button type="button" name="show_archive" id="jq_show_archive" class="btn btn-primary show_archive"><i class="fa fa-inbox"></i></button>
+                  <button type="button" data-toggle="tooltip" title="Show Archive Data" name="show_archive" id="jq_show_archive" class="btn btn-primary show_archive"><i class="fa fa-inbox"></i></button>
                   <button type="button" name="add_data" id="jq_add_data" class="btn btn-warning add_data"><i class="fa fa-plus-circle"></i></button>
                   <button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button>
                 </div>
@@ -95,6 +95,31 @@ include "api.php";
   </div>
 </div>
 
+
+
+<!-- Pop up Selected -->
+<div id="selectModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Select Data</h4>
+        <div align="right">
+          <!-- <button type="button" name="refresh_supplier_data" id="jq_refresh_supplier_data" class="btn btn-success refresh_supplier_data"><i class="fa fa-refresh"></i></button> -->
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="card-box table-responsive" id="form_select">
+          <!-- Import From Form File -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   function act_refresh_data_detail() {
     $.ajax({
@@ -139,6 +164,46 @@ include "api.php";
       success: function(data) {
         $('#form_edit').html(data);
         $('#editModal').modal('show');
+      }
+    });
+  }
+
+  function act_update_data() {
+
+    $.ajax({
+      url: "action.php",
+      method: "POST",
+      data: {
+        action_status: "validate_data",
+        id: $('#jq_id').val(),
+        code: $('#jq_account_code').val(),
+        name: $('#jq_account_name').val()
+      },
+      success: function(data) {
+        var parsedData = $.parseJSON(data);
+        var result = parsedData[0].msg;
+        if (result == "") {
+          $.ajax({
+            url: "action.php",
+            method: "POST",
+            data: $('#update_form').serialize(),
+            beforeSend: function() {
+              $('#update').val("Updating");
+            },
+            success: function(data) {
+              $('#update_form')[0].reset();
+              $('#editModal').modal('hide');
+              act_refresh_data_detail();
+            }
+          });
+        } else {
+          Swal.fire({
+            position: "top",
+            title: "Warning",
+            text: result,
+            icon: "warning"
+          });
+        }
       }
     });
   }
@@ -196,7 +261,12 @@ include "api.php";
     //Archive Detail
     $(document).on('click', '.archive_detail', function() {
       if ($('#jq_archive_reason').val() == '') {
-        alert("Archive Reason Must be Filled");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Archive Reason Must be Filled !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -246,43 +316,89 @@ include "api.php";
       act_refresh_data_detail();
     });
 
+
     //Update Detail
-    $(document).on('click', '.update', function() {
+    $(document).on('click', '.update_detail', function() {
       if ($('#jq_account_code').val() == "") {
-        alert("Mohon Isi Account Code");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Account Code Must be Filled !",
+          icon: "warning"
+        });
       } else if ($('#jq_account_name').val() == "") {
-        alert("Mohon Isi Account Name");
-      } else {
-        $.ajax({
-          url: "action.php",
-          method: "POST",
-          data: {
-            action_status: "validate_data",
-            id: $('#jq_id').val(),
-            code: $('#jq_account_code').val(),
-            name: $('#jq_account_name').val()
-          },
-          success: function(data) {
-            if (data == "") {
-              $.ajax({
-                url: "action.php",
-                method: "POST",
-                data: $('#update_form').serialize(),
-                beforeSend: function() {
-                  $('#update').val("Updating");
-                },
-                success: function(data) {
-                  $('#update_form')[0].reset();
-                  $('#editModal').modal('hide');
-                  act_refresh_data_detail();
-                }
-              });
-            } else {
-              alert(data);
-            }
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Account Name be Filled !",
+          icon: "warning"
+        });
+      } else if ($('#jq_sub_account_id').val() == "") {
+        Swal.fire({
+          position: "top",
+          title: "Confirmation",
+          text: "Are you sure update this ACCOUNT without SUB ACCOUNT ?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          reverseButtons: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            act_update_data();
           }
         });
+      } else {
+        act_update_data();
       }
+    });
+
+    $(document).on("click", ".choose_sub_account_data", function() {
+      var action_status = "choose_sub_account_data";
+      $.ajax({
+        url: "property.php",
+        method: "POST",
+        data: {
+          action_status: action_status,
+          data_id: $(this).attr("id")
+        },
+        success: function(data) {
+          $("#form_select").html(data);
+          $("table#select_table").pretty_format_table();
+          $("table#select_table").DataTable({
+            pageLength: 100,
+          });
+          $("#selectModal").modal("show");
+        }
+      });
+    });
+
+    //Select Sub Data
+    $(document).on("click", ".select_sub_account_data", function() {
+      var data_id = $(this).attr("id");
+      var action_status = "select_sub_account_data";
+      $.ajax({
+        url: "action.php",
+        method: "POST",
+        data: {
+          data_id: data_id,
+          action_status: action_status
+        },
+        success: function(data) {
+          var parsedData = $.parseJSON(data);
+          $("input#jq_sub_account_id").val(parsedData[0].id);
+          $("input#jq_sub_account_name").val(parsedData[0].account_name);
+          $("#selectModal").modal("hide");
+          act_refresh_table();
+        }
+      });
+    });
+
+    //Clear Sub Account Data
+    $(document).on("click", ".clear_sub_account_data", function() {
+      $("input#jq_sub_account_id").val("");
+      $("input#jq_sub_account_name").val("");
+      act_refresh_table();
     });
   });
 
