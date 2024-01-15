@@ -126,11 +126,11 @@ include "api.php";
       url: "property.php",
       method: "POST",
       data: {
-        action_status: 'refresh_data_detail'
+        action_status: "refresh_data_detail"
       },
       success: function(data) {
-        $('#data_detail').html(data);
-        $('#datatable').DataTable()
+        $("#data_detail").html(data);
+        $("#datatable").DataTable()
       }
     });
   }
@@ -140,12 +140,12 @@ include "api.php";
       url: "property.php",
       method: "POST",
       data: {
-        action_status: 'change_role_user',
+        action_status: "change_role_user",
         data_id: arg_data_id
       },
       success: function(data) {
-        $('#form_hak').html(data);
-        $('#change_role_user_table').DataTable();
+        $("#form_hak").html(data);
+        $("#change_role_user_table").DataTable();
       }
     });
   }
@@ -155,12 +155,12 @@ include "api.php";
       url: "property.php",
       method: "POST",
       data: {
-        action_status: 'add_user_role',
-        data_id: $('#jq_user_role_id').val()
+        action_status: "add_user_role",
+        data_id: $("#jq_user_role_id").val()
       },
       success: function(data) {
-        $('#form_menu_process').html(data);
-        $('#add_user_role_table').DataTable();
+        $("#form_menu_process").html(data);
+        $("#add_user_role_table").DataTable();
       }
     });
   }
@@ -172,14 +172,14 @@ include "api.php";
 
   $(document).ready(function() {
     //Refresh Table User
-    $(document).on('click', '.refresh_data_user', function() {
+    $(document).on("click", ".refresh_data_user", function() {
       act_refresh_table_register();
     })
 
     //Change Password Data
-    $(document).on('click', '.change_password_user', function() {
+    $(document).on("click", ".change_password_user", function() {
       var data_id = $(this).attr("id");
-      var action_status = 'change_password_user';
+      var action_status = "change_password_user";
       var user = $("#jq_pengguna").val();
       $.ajax({
         url: "property.php",
@@ -190,14 +190,14 @@ include "api.php";
           user: user
         },
         success: function(data) {
-          $('#form_change').html(data);
-          $('#changepassModal').modal('show');
+          $("#form_change").html(data);
+          $("#changepassModal").modal("show");
         }
       });
     });
 
     // Change Active User
-    $(document).on('click', '.change_active_user', function() {
+    $(document).on("click", ".change_active_user", function() {
       var data_id = $(this).attr("id");
       var text = "Are you sure change active status this User ?";
       if (confirm(text) == true) {
@@ -219,35 +219,49 @@ include "api.php";
     });
 
     //Change Role User
-    $(document).on('click', '.change_role_user', function() {
+    $(document).on("click", ".change_role_user", function() {
       var user_role_id = $(this).attr("id");
       act_refresh_table_hak_akes(user_role_id);
-      $('#hakModal').modal('show');
+      $("#hakModal").modal("show");
     });
 
     //Refresh Table User Acess
-    $(document).on('click', '.refresh_data_user_role', function() {
-      var user_role_id = $('#jq_user_role_id').val();
+    $(document).on("click", ".refresh_data_user_role", function() {
+      var user_role_id = $("#jq_user_role_id").val();
       act_refresh_table_hak_akes(user_role_id);
     })
 
     //Valdate dan Change Password Data
-    $(document).on('click', '.change_password_data', function() {
-      if ($('#jq_new_password').val() == "") {
-        alert("Mohon Isi Password Baru");
-      } else if ($('#jq_re_enter_password').val() == '') {
-        alert("Mohon Isi Konfirmasi Password Baru");
-      } else if ($('#jq_new_password').val() !== $('#jq_re_enter_password').val()) {
-        alert("Konfirmasi Password Salah Mohon Isi Ulang!");
+    $(document).on("click", ".change_password_data", function() {
+      if ($("#jq_new_password").val() == "") {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Please fill a new password !",
+          icon: "warning"
+        });
+      } else if ($("#jq_re_enter_password").val() == "") {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Please fill a new password confirmation !",
+          icon: "warning"
+        });
+      } else if ($("#jq_new_password").val() !== $("#jq_re_enter_password").val()) {
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "The password and confirmation password are not the same, please check again !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
           method: "POST",
-          data: $('#change_form').serialize(),
+          data: $("#change_form").serialize(),
           success: function(data) {
-            $('#change_form')[0].reset();
-            $('#changepassModal').modal('hide');
-            alert("Password Telah Diubah.");
+            $("#change_form")[0].reset();
+            $("#changepassModal").modal("hide");
             act_refresh_table_register();
           }
         });
@@ -255,19 +269,19 @@ include "api.php";
     });
 
     //Add Menu Process
-    $(document).on('click', '.add_user_role', function() {
+    $(document).on("click", ".add_user_role", function() {
       act_refresh_table_menu_access();
-      $('#addmenuprocessModal').modal('show');
+      $("#addmenuprocessModal").modal("show");
     });
 
     //Remove User Role
-    $(document).on('click', '.remove_hak_data', function() {
-      var user_role_id = $('#jq_user_role_id').val();
+    $(document).on("click", ".remove_hak_data", function() {
+      var user_role_id = $("#jq_user_role_id").val();
       $.ajax({
         url: "action.php",
         method: "POST",
         data: {
-          action_status: 'remove_hak_detail',
+          action_status: "remove_hak_detail",
           data_id: $(this).attr("id")
         },
         success: function(data) {
@@ -277,18 +291,18 @@ include "api.php";
     });
 
     //Refresh Table Menu Process
-    $(document).on('click', '.refresh_data_menu_proses', function() {
+    $(document).on("click", ".refresh_data_menu_proses", function() {
       act_refresh_table_menu_access();
     })
 
     //Select Menu Process
-    $(document).on('click', '.select_menu_process', function() {
-      var user_role_id = $('#jq_user_role_id').val();
+    $(document).on("click", ".select_menu_process", function() {
+      var user_role_id = $("#jq_user_role_id").val();
       $.ajax({
         url: "action.php",
         method: "POST",
         data: {
-          action_status: 'select_menu_process',
+          action_status: "select_menu_process",
           menu_proces_id: $(this).attr("id"),
           user_role_id: user_role_id,
           created_by: $("#jq_pengguna").val()
