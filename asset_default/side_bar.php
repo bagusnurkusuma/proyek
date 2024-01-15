@@ -33,6 +33,10 @@ if (is_array($hasil) && count($hasil)) {
       text-align: center;
     }
   </style>
+  <!-- Include SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <!-- Include SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <!-- Script JQuery -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -291,7 +295,7 @@ if (is_array($hasil) && count($hasil)) {
   <script src="../asset_design/vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
   <!-- Custom Theme Scripts -->
   <script src="../asset_design/build/js/custom.min.js"></script>
-  <script src="../asset_default/function.js"></script>
+  <script type="text/javascript" src="../asset_default/function.js"></script>
 </body>
 
 </html>
