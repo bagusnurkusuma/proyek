@@ -182,11 +182,18 @@ include "api.php";
   }
 
   function act_cancel() {
-    var text = "Are you sure cancel this transaction";
-    if (confirm(text) == true) {
-      $(document).ready(function() {
+    Swal.fire({
+      position: "top",
+      title: "Confirmation",
+      text: "Are you sure Cancel this Transaction ?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+      reverseButtons: false
+    }).then((result) => {
+      if (result.isConfirmed) {
         var transaction_id = $("#jq_transaction_id").val();
-
         $.ajax({
           url: "action.php",
           method: "POST",
@@ -198,9 +205,8 @@ include "api.php";
             go_to_home_pages();
           }
         });
-
-      });
-    } else {}
+      }
+    });
   }
 
   function get_data_detail_edit(arg_data_id, arg_action_status) {
@@ -303,11 +309,26 @@ include "api.php";
     $(document).on("click", ".update_detail", function() {
       event.preventDefault();
       if ($("input#jq_debet").val() < 0) {
-        alert("Debet tidak boleh di isi minus");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Debit cannot be filled with a minus !",
+          icon: "warning"
+        });
       } else if ($("input#jq_credit").val() < 0) {
-        alert("Credit tidak boleh di isi minus");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Credit cannot be filled with a minus !",
+          icon: "warning"
+        });
       } else if ($("input#jq_account_id").val() == "") {
-        alert("Account Harus di pilih");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Account Must be Selected !",
+          icon: "warning"
+        });
       } else {
         $.ajax({
           url: "action.php",
@@ -328,34 +349,56 @@ include "api.php";
     //Save Transaction
     $(document).on("click", ".save_transaction", function() {
       if ($("#transaction_number").val() == "") {
-        alert("Inventory harus diisi");
+        Swal.fire({
+          position: "top",
+          title: "Warning",
+          text: "Account Must be Selected !",
+          icon: "warning"
+        });
       } else {
         var transaction_id = $("#jq_transaction_id").val();
         var transaction_date = $("#jq_transaction_date").val();
         var reference_number = $("#jq_reference_number").val();
         var description = $("#jq_description_parent").val();
-        if (confirm("Are You Sure To Save This Transaction ?") == true) {
-          $.ajax({
-            url: "action.php",
-            method: "POST",
-            data: {
-              action_status: "validate_detail",
-              transaction_id: transaction_id,
-              transaction_date: transaction_date,
-              reference_number: reference_number,
-              description: description
-            },
-            success: function(data) {
-              var parsedData = $.parseJSON(data);
-              var result = parsedData[0].msg;
-              if (result == "") {
-                window.location = "../general_journal/form.php";
-              } else {
-                alert(result);
+        Swal.fire({
+          position: "top",
+          title: "Confirmation",
+          text: "Are You Sure To Save This Transaction ?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes",
+          cancelButtonText: "No",
+          reverseButtons: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: "action.php",
+              method: "POST",
+              data: {
+                position: "top",
+                action_status: "validate_detail",
+                transaction_id: transaction_id,
+                transaction_date: transaction_date,
+                reference_number: reference_number,
+                description: description
+              },
+              success: function(data) {
+                var parsedData = $.parseJSON(data);
+                var result = parsedData[0].msg;
+                if (result == "") {
+                  window.location = "../general_journal/form.php";
+                } else {
+                  Swal.fire({
+                    position: "top",
+                    title: "Warning",
+                    text: result,
+                    icon: "warning"
+                  });
+                }
               }
-            }
-          });
-        } else {}
+            });
+          }
+        });
       }
     });
   });
