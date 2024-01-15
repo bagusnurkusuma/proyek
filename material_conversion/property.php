@@ -1,10 +1,3 @@
-<script>
-  function formatNumber(number) {
-    return number.toLocaleString(undefined, {
-      maximumFractionDigits: 2
-    });
-  }
-</script>
 <?php
 include("api.php");
 if (!empty($_POST)) {
