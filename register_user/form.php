@@ -26,12 +26,9 @@ include "api.php";
               <div class="x_title">
                 <h2>Register User</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
+                  <li><button type="button" name="refresh_user" id="jq_refresh_user" class="btn btn-success refresh_data_user"><i class="fa fa-refresh"></i></button></li>
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 </ul>
-                <div align="right">
-                  <button type="button" name="refresh_user" id="jq_refresh_user" class="btn btn-success refresh_data_user"><i class="fa fa-refresh"></i></button>
-                </div>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
