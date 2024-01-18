@@ -35,12 +35,23 @@ function get_data_ledger_detail($input_function)
     return $hasil;
 }
 
-// Get Data Journal
 function get_data_journal($input_function)
 {
     include "../asset_default/koneksi.php";
     $input = json_encode($input_function);
     $query = "SELECT accounting.list_journal_ledger('" . $input . "') as result";
+    $result = pg_query($link, $query);
+    $row = pg_fetch_array($result);
+    $hasil = json_decode($row["result"], true);
+    $hasil = $hasil["body"];
+    return $hasil;
+}
+
+function get_data_account($input_function)
+{
+    include "../asset_default/koneksi.php";
+    $input = json_encode($input_function);
+    $query = "SELECT master.list_master_account('" . $input . "') as result";
     $result = pg_query($link, $query);
     $row = pg_fetch_array($result);
     $hasil = json_decode($row["result"], true);
