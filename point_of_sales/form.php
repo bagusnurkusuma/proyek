@@ -33,13 +33,10 @@ endforeach;
               <div class="x_title">
                 <h2>Point of Sales</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a>
-                  </li>
+                  <li><button type="button" name="pay" id="jq_pay" class="btn btn-success pay">Pay</button></li>
+                  <li><button type="button" name="cancel" id="jq_cancel" class="btn btn-primary cancel" onclick="act_cancel()">Cancel</button></li>
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a></li>
                 </ul>
-                <div align="right">
-                  <button type="button" name="pay" id="jq_pay" class="btn btn-success pay">Pay</button>
-                  <button type="button" name="cancel" id="jq_cancel" class="btn btn-primary cancel" onclick="act_cancel()">Cancel</button>
-                </div>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
@@ -49,72 +46,65 @@ endforeach;
                   <div class="row">
                     <div class="col-md-6 col-sm-12  form-group">
                       <label class="control-label col-md-3">Trx Number</label>
-                      <div class="col-md-9">
+                      <div class="col-md-9 input-group">
                         <input type="text" name="transaction_number" id="jq_transaction_number" value=<?php echo $parent["transaction_number"]; ?> class="form-control" readonly="true" style="margin-bottom: 10px;">
                       </div>
                     <?php endforeach; ?>
                     <label class="control-label col-md-3">Trx Date</label>
-                    <div class="col-md-9">
+                    <div class="col-md-9 input-group">
                       <input type="date" name="transaction_date" id="jq_transaction_date" value="" class="form-control" style="margin-bottom: 10px;">
                     </div>
                     </div>
                     <div class="col-md-6 col-sm-12 form-group">
                       <label class="control-label col-md-3">Outlet </label>
-                      <div class="col-md-9">
-                        <div class="input-group">
-                          <input type="hidden" name="outlet_id" id="jq_outlet_id" value="<?php echo $def_outlet_id ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                          <input type="text" name="outlet_name" id="jq_outlet_name" value="<?php echo $def_outlet_name ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                        </div>
+                      <div class="col-md-9 input-group">
+                        <input type="hidden" name="outlet_id" id="jq_outlet_id" value="<?php echo $def_outlet_id ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                        <input type="text" name="outlet_name" id="jq_outlet_name" value="<?php echo $def_outlet_name ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
                       </div>
                       <label class="control-label col-md-3">Customer </label>
-                      <div class="col-md-9">
-                        <div class="input-group">
-                          <input type="hidden" name="customer_id" id="jq_customer_id" value="<?php echo $def_customer_id ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                          <input type="text" name="customer_name" id="jq_customer_name" value="<?php echo $def_customer_name ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                          <span class="input-group-btn">
-                            <button type="button" name="choose_customer_data" id="" class="btn btn-warning btn-xs choose_customer_data"><i class="fa fa-hand-o-up"></i></button>
-                          </span>
-                        </div>
+                      <div class="col-md-9 input-group">
+                        <input type="hidden" name="customer_id" id="jq_customer_id" value="<?php echo $def_customer_id ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                        <input type="text" name="customer_name" id="jq_customer_name" value="<?php echo $def_customer_name ?>" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                        <span class="input-group-btn">
+                          <button type="button" name="choose_customer_data" id="" class="btn btn-warning btn-xs choose_customer_data"><i class="fa fa-hand-o-up"></i></button>
+                        </span>
                       </div>
                       <label class="control-label col-md-3">Grand Total</label>
-                      <div class="col-md-9">
+                      <div class="col-md-9 input-group">
                         <input type="text" name="input_grand_total" id="jq_input_grand_total" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
                       </div>
                     </div>
                   </div>
-              </div>
 
-              <div class=" x_panel">
-                <div class="x_title">
-                  <h2>Product Detail </h2>
-                  <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                  </ul>
-                  <div class="col-md-2 col-sm-12  form-group">
-                    <input type="number" value="" placeholder="Input Qty" name="txt_qty_barcode" id="jq_qty_barcode_form" class="form-control" style="margin-bottom: 10px;" onmouseover="this.focus();">
+                  <div class=" x_panel">
+                    <div class="x_title">
+                      <h2>Product Detail </h2>
+                      <ul class="nav navbar-right panel_toolbox">
+                        <li><button type="button" name="add_product" id="jq_add_product" class="btn btn-warning add_product"><i class="fa fa-plus-circle"></i></button></li>
+                        <li><button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button></li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                      </ul>
+                      <div class="col-md-2 col-sm-12  form-group">
+                        <input type="number" value="" placeholder="Input Qty" name="txt_qty_barcode" id="jq_qty_barcode_form" class="form-control" style="margin-bottom: 10px;" onmouseover="this.focus();">
+                      </div>
+                      <div class="col-md-4 col-sm-12  form-group">
+                        <input type="text" value="" placeholder="Input with Barcode" name="txt_barcode" id="jq_barcode_form" class="form-control" style="margin-bottom: 10px;" onmouseover="this.focus();">
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                      <div class="card-box table-responsive" id="data_detail">
+                        <!-- Import From Form File -->
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-md-4 col-sm-12  form-group">
-                    <input type="text" value="" placeholder="Input with Barcode" name="txt_barcode" id="jq_barcode_form" class="form-control" style="margin-bottom: 10px;" onmouseover="this.focus();">
-                  </div>
-                  <div align="right">
-                    <button type="button" name="add_product" id="jq_add_product" class="btn btn-warning add_product"><i class="fa fa-plus-circle"></i></button>
-                    <button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                  <div class="card-box table-responsive" id="data_detail">
-                    <!-- Import From Form File -->
-                  </div>
-                </div>
               </div>
             </div>
           </div>
+          <!--page content -->
         </div>
-        <!--page content -->
       </div>
     </div>
-  </div>
 </body>
 
 </html>
