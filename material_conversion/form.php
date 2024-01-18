@@ -26,13 +26,10 @@ include "api.php";
               <div class="x_title">
                 <h2>Material Conversion</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a>
-                  </li>
+                  <li><button type="button" name="pay" id="jq_pay" class="btn btn-success save_transaction">Save</button></li>
+                  <li><button type="button" name="cancel" id="jq_cancel" class="btn btn-primary cancel_transaction" onclick="act_cancel()">Cancel</button></li>
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a></li>
                 </ul>
-                <div align="right">
-                  <button type="button" name="pay" id="jq_pay" class="btn btn-success save_transaction">Save</button>
-                  <button type="button" name="cancel" id="jq_cancel" class="btn btn-primary cancel_transaction" onclick="act_cancel()">Cancel</button>
-                </div>
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
@@ -94,12 +91,10 @@ include "api.php";
                     <div class="x_title">
                       <h2>Inventory Detail </h2>
                       <ul class="nav navbar-right panel_toolbox">
+                        <li><button type="button" name="add_product" id="jq_add_product" class="btn btn-warning add_product"><i class="fa fa-plus-circle"></i></button></li>
+                        <li><button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button></li>
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                       </ul>
-                      <div align="right">
-                        <button type="button" name="add_product" id="jq_add_product" class="btn btn-warning add_product"><i class="fa fa-plus-circle"></i></button>
-                        <button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button>
-                      </div>
                       <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
