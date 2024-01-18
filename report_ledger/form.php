@@ -23,8 +23,7 @@ include "../asset_default/side_bar.php";
               <div class="x_title">
                 <h2>Ledger</h2>
                 <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a>
-                  </li>
+                  <li><a class="collapse-link"><i class="fa fa-chevron-up justify-content-end"></i></a></li>
                 </ul>
                 <div class="clearfix"></div>
               </div>
@@ -33,29 +32,27 @@ include "../asset_default/side_bar.php";
                 <div class="row">
                   <div class="col-md-6 col-sm-12  form-group">
                     <label class="control-label col-md-3">Start Date</label>
-                    <div class="col-md-9">
+                    <div class="col-md-9 input-group">
                       <input type="date" name="start_date" id="jq_start_date" value="" class="form-control" style="margin-bottom: 10px;">
                     </div>
                     <label class="control-label col-md-3">End Date</label>
-                    <div class="col-md-9">
+                    <div class="col-md-9 input-group">
                       <input type="date" name="end_date" id="jq_end_date" value="" class="form-control" style="margin-bottom: 10px;">
                     </div>
                     <label class="control-label col-md-3">Show Sum By Account Parent</label>
-                    <div class="col-md-9">
+                    <div class="col-md-9 input-group">
                       <input type="checkbox" id="checkbox" class="form-control" style="margin-bottom: 10px;">
                     </div>
-                    <label class="control-label col-md-3">Inventory </label>
-                    <div class="col-md-9">
-                      <div class="input-group">
-                        <input type="hidden" name="inventory_id" id="jq_inventory_id" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                        <input type="text" name="inventory_name" id="jq_inventory_name" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
-                        <span class="input-group-btn">
-                          <button type="button" name="choose_inventory_data" id="" class="btn btn-warning btn-xs choose_inventory_data"><i class="fa fa-pencil-square"></i></button>
-                        </span>
-                        <span class="input-group-btn">
-                          <button type="button" name="clear_inventory_data" id="" class="btn btn-danger btn-xs clear_inventory_data"><i class="fa fa-close"></i></button>
-                        </span>
-                      </div>
+                    <label class="control-label col-md-3">Account </label>
+                    <div class="col-md-9 input-group">
+                      <input type="hidden" name="filter_account_id" id="jq_filter_account_id" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                      <input type="text" name="filter_account_name" id="jq_filter_account_name" value="" class="form-control" style="margin-bottom: 10px;" readonly="true">
+                      <span class="input-group-btn">
+                        <button type="button" name="choose_filter_account_data" id="" class="btn btn-warning btn-xs choose_filter_account_data"><i class="fa fa-pencil-square"></i></button>
+                      </span>
+                      <span class="input-group-btn">
+                        <button type="button" name="clear_filter_account_data" id="" class="btn btn-danger btn-xs clear_filter_account_data"><i class="fa fa-close"></i></button>
+                      </span>
                     </div>
                   </div>
                   <div id="structure_table" hidden="hidden"></div>
@@ -63,11 +60,9 @@ include "../asset_default/side_bar.php";
                     <div class="x_title">
                       <h2>Ledger Detail </h2>
                       <ul class="nav navbar-right panel_toolbox">
+                        <li><button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button></li>
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                       </ul>
-                      <div align="right">
-                        <button type="button" name="refresh" id="jq_refresh" class="btn btn-success refresh_data"><i class="fa fa-refresh"></i></button>
-                      </div>
                       <div class="clearfix"></div>
                     </div>
 
@@ -119,8 +114,9 @@ include "../asset_default/side_bar.php";
       method: "POST",
       data: {
         action_status: "refresh_data_main_table",
-        start_date: $("#jq_start_date").val(),
-        end_date: $("#jq_end_date").val()
+        start_date: $("input#jq_start_date").val(),
+        end_date: $("input#jq_end_date").val(),
+        account_id: $("input#jq_filter_account_id").val()
       },
       success: function(data) {
         $("div#div_main_table").html(data);
@@ -293,8 +289,9 @@ include "../asset_default/side_bar.php";
     $('#checkbox').change(function() {
       // act_refresh_main_table(false);
       if ($(this).is(':checked')) {
-        $('#result').text('Checkbox is checked');
-        //Sum dan gabungkan Steucture Table dengan Main Table
+        $("#jq_filter_account_id").val("");
+        $("#jq_filter_account_name").val("");
+        //Sum dan gabungkan Structure Table dengan Main Table
         var tr_structure = $("table#structure_table tbody").find("tr");
         tr_structure.each(function() {
           get_total_structure($(this));
@@ -348,6 +345,55 @@ include "../asset_default/side_bar.php";
           $("#selectModal").modal("show");
         }
       });
+    });
+
+    //Choose Filter Account Data
+    $(document).on("click", ".choose_filter_account_data", function() {
+      var action_status = "choose_filter_account_data";
+      $.ajax({
+        url: "property.php",
+        method: "POST",
+        data: {
+          action_status: action_status
+        },
+        success: function(data) {
+          $("#form_select").html(data);
+          $("table#select_table").pretty_format_table();
+          $("table#select_table").DataTable({
+            pageLength: "100"
+          });
+          $("#selectModal").modal("show");
+        }
+      });
+    });
+
+    //Select Filter Account Data
+    $(document).on("click", ".select_filter_account_data", function() {
+      var data_id = $(this).attr("id");
+      var action_status = "select_filter_account_data";
+      $.ajax({
+        url: "action.php",
+        method: "POST",
+        data: {
+          data_id: data_id,
+          action_status: action_status
+        },
+        success: function(data) {
+          var parsedData = $.parseJSON(data);
+          $("#jq_filter_account_id").val(parsedData[0].id);
+          $("#jq_filter_account_name").val(parsedData[0].account_concat);
+          $("#selectModal").modal("hide");
+          $('#checkbox').prop("checked", false);
+          act_refresh_main_table();
+        }
+      });
+    });
+
+    //Clear Filter Account Data
+    $(document).on("click", ".clear_filter_account_data", function() {
+      $("#jq_filter_account_id").val("");
+      $("#jq_filter_account_name").val("");
+      act_refresh_main_table();
     });
   });
 </script>
