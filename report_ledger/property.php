@@ -77,8 +77,7 @@ if (!empty($_POST)) {
       array(
          "start_date" => $_POST["start_date"],
          "end_date" => $_POST["end_date"],
-         "account_id" => null,
-         "is_show_intransit" => true
+         "account_id" => $_POST["account_id"]
       ));
       $hasil = get_data_detail($input);
       if (is_array($hasil) && count($hasil)) {
@@ -165,6 +164,31 @@ if (!empty($_POST)) {
             </tr>
         </tfoot>
       </table>';
+   } elseif ($_POST['action_status'] == 'choose_filter_account_data') {
+      $output .= '
+      <table id="select_table" class="table table-striped table-bordered" style="width:100%">
+         <thead>
+         <tr>
+            <th>Account</th>
+            <th>Option</th> 
+         </tr>
+      </thead>
+      <tbody>
+      ';
+      $input = ['body' => ['id' => null]];
+      $hasil = get_data_account($input);
+      if (is_array($hasil) && count($hasil)) {
+         foreach ($hasil as $row) :
+            $output .= '
+            <tr>  
+               <td>' . $row["account_concat"] . '</td>
+               <td><button type="button" name="select" id="' . $row["id"] . '" class="btn btn-warning btn-xs select_filter_account_data">Select</button>                                  
+               </td>
+            </tr>
+         ';
+         endforeach;
+      }
+      $output .= '</tbody></table>';
    }
    echo $output;
 }
